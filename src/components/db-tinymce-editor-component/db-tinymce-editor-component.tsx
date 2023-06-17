@@ -99,11 +99,11 @@ export class DbTinymceEditorComponent {
   {
     
             
-            let htmlContent=editor.getBody().innerText;
-            let textContent=editor.getBody().innerHTML;
+            let htmlContent=editor.getBody().innerHTML;
+            let textContent=editor.getBody().innerText;
             this.editorHTMLContent=htmlContent;
             this.editorTextContent=textContent;
-            this.nativeEditorDOMElement.dataset.editorHTMLContent=this.editorHTMLContent;
+            this.nativeEditorDOMElement.dataset.editorHtmlContent=this.editorHTMLContent;
             this.nativeEditorDOMElement.dataset.editorTextContent=this.editorTextContent;
             this.editorInputChangeEvent.emit({htmlContent,textContent});
             
@@ -164,10 +164,12 @@ export class DbTinymceEditorComponent {
   }
 
   render() {
-    
+    let content=this.editorHTMLContent;
+    if(content == null)
+      content=this.initialEditorHTMLContent;
     return (
       <Host>
-        <textarea id={this.id+"-underlying"}></textarea>
+        <textarea id={this.id+"-underlying"}>{content}</textarea>
       </Host>
     );
   }

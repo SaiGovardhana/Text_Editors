@@ -1,4 +1,4 @@
-# db-quill-editor
+# db-tinymce-editor
 
 
 
@@ -13,7 +13,7 @@
 | `editorHeight`                     | `editor-height`       |             | `string`  | `undefined` |
 | `editorWidth`                      | `editor-width`        |             | `string`  | `undefined` |
 | `id`                               | `id`                  |             | `string`  | `undefined` |
-| `initalEditorHtmlContent`          | `editor-html-content` |             | `string`  | `undefined` |
+| `initialEditorHTMLContent`         | `editor-html-content` |             | `string`  | `undefined` |
 | `initialEditorTextContent`         | `editor-text-content` |             | `string`  | `undefined` |
 | `readOnly`                         | `read-only`           |             | `boolean` | `false`     |
 | `toolbarConfigString` _(required)_ | `toolbar-config`      |             | `string`  | `undefined` |
