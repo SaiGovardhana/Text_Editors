@@ -1,0 +1,35 @@
+
+<html >
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0" />
+    <title>Stencil Component Starter</title>
+
+    <script type="module" src="/build/editors.esm.js"></script>
+    <script nomodule src="/build/editors.js"></script>
+
+  </head>
+  <body>
+   
+    <!--  <db-quill-editor read-only="true" toolbar-config="bold|orderedlist|indent|textColor"   id="LH"></db-quill-editor>-->
+
+    <db-tinymce-editor id="LH" toolbar-config="orderedlist|bold|font" editor-html-content="Hello World" editor-height="200px" ></db-tinymce-editor>
+    <button onclick="deleteEditor()">Delete</button>
+    <button onclick="addEditor()">Add</button>
+
+    <script>
+      let db=document.querySelector("#LH");
+
+      function deleteEditor()
+      {
+        db.remove();
+      }
+      function addEditor()
+      {
+        document.body.prepend(db);
+      }
+
+      document.querySelector("db-tinymce-editor").addEventListener("editorchange",({detail})=>console.log(detail))
+    </script>
+  </body>
+</html>
