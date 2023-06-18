@@ -1,5 +1,6 @@
 import { Component, Host, h, Element, Prop, Event, EventEmitter } from '@stencil/core';
 /* Import TinyMCE */
+
 import tinymce, { Editor } from 'tinymce';
 import  'tinymce/models/dom/model';
  /* Default icons are required for TinyMCE 5.3 or above */
@@ -22,6 +23,8 @@ import contentCss from 'tinymce/skins/content/default/content.css';
 import { toolbarConfigParser } from './toolbar/ToolbarConfigParser.util';
 import { EditorChangeEvent } from './db-tinymce.types';
 
+//Get The Scripts Origin For Fetching CSS
+let scriptOrigin=new URL(import.meta.url).origin;
 
 @Component({
   tag: 'db-tinymce-editor',
@@ -138,7 +141,7 @@ export class DbTinymceEditorComponent {
           //Fixed Height
           resize:false,
           //Base Url To Find CSS files for themes
-          base_url:'/assets/tinymce',
+           base_url:`${scriptOrigin}/assets/tinymce`,
           //plugins
           plugins:"lists",
           //Specify Options as Space Seperated values
@@ -156,7 +159,16 @@ export class DbTinymceEditorComponent {
             editor.on('input',currentUpdateHandler);
             //Triggered For Change In Editor, like applying Bold, change font size .etc
             editor.on('Change',currentUpdateHandler);
-          }
+          },
+          //Code To Fix Text wrapping to new-line instead of horizontal scroll.
+          setup: function (editor) {
+            editor.on('init', function () {
+              
+                let contentContainer = (editor.getContainer().querySelector('.tox-edit-area__iframe') as HTMLIFrameElement).contentDocument.body;
+                contentContainer.style.whiteSpace = 'nowrap';
+                contentContainer.style.overflowX = 'auto';
+            });
+        }
         });
         
       }
