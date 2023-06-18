@@ -22,6 +22,7 @@ import contentUiCss from 'tinymce/skins/ui/oxide/content.css';
 import contentCss from 'tinymce/skins/content/default/content.css';
 import { toolbarConfigParser } from './toolbar/ToolbarConfigParser.util';
 import { EditorChangeEvent } from './db-tinymce.types';
+import { autoComplete, matchesCheck, onAction, parseAutoCompleteWords } from './autocomplete/autocomplete.util';
 
 //Get The Scripts Origin For Fetching CSS
 let scriptOrigin=new URL(import.meta.url).origin;
@@ -41,7 +42,10 @@ export class DbTinymceEditorComponent {
   //Attribute For Hiding Toolbar
   @Prop({"attribute":"disable-toolbar"})
   disableToolbar:boolean
+  @Prop({attribute:'disable-statusbar'})
+  disableStatusBar:boolean
   //Read-only attribute
+  
   @Prop({attribute:"read-only"})
   readOnly=false
   //Editor Width 
@@ -54,6 +58,13 @@ export class DbTinymceEditorComponent {
     initialEditorHTMLContent:string
   @Prop({attribute:"editor-text-content"})
     initialEditorTextContent:string
+  
+  //Auto Complete Configuration
+  @Prop({attribute:'enable-autocomplete'})
+    enableAutoComplete:boolean
+  @Prop({attribute:"autocomplete-words"})
+    autoCompleteWordsString:string
+
   
   //Internal Variables Used To Maintain Data between DOM insertion and deletion
   editorHTMLContent:string
@@ -146,6 +157,8 @@ export class DbTinymceEditorComponent {
           plugins:"lists",
           //Specify Options as Space Seperated values
           toolbar:this.disableToolbar?false:toolBarConfig,
+          //Specify status bar visibilty
+          statusbar:this.disableStatusBar?false:true,
           //Read Only Property
           readonly:this.readOnly,
           //Set Height And Width
@@ -160,13 +173,23 @@ export class DbTinymceEditorComponent {
             //Triggered For Change In Editor, like applying Bold, change font size .etc
             editor.on('Change',currentUpdateHandler);
           },
-          //Code To Fix Text wrapping to new-line instead of horizontal scroll.
-          setup: function (editor) {
-            editor.on('init', function () {
+          //Code To Fix Text wrapping to new-line instead of horizontal scroll And AutoComplete.
+          setup:  (editor) =>{
+            editor.on('init', ()=> {
               
                 let contentContainer = (editor.getContainer().querySelector('.tox-edit-area__iframe') as HTMLIFrameElement).contentDocument.body;
                 contentContainer.style.whiteSpace = 'nowrap';
                 contentContainer.style.overflowX = 'auto';
+                //AutoComplete Functionality
+                if(this.enableAutoComplete==true && this.autoCompleteWordsString!=null)
+                {
+                let parsedWords=parseAutoCompleteWords(this.autoCompleteWordsString);
+                let autoCompleteFetchCallback=autoComplete.bind(null,parsedWords);
+                let onActionCallback=onAction.bind(null,editor);
+                //Note: Couldn't Import Types
+                //@ts-ignore
+                editor.ui.registry.addAutocompleter("Demo",{matches:matchesCheck,trigger:"@",minChars:0,onAction:onActionCallback,fetch:autoCompleteFetchCallback})
+                }
             });
         }
         });
