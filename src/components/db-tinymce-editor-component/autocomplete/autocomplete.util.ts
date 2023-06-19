@@ -10,6 +10,8 @@ export function parseAutoCompleteWords(wordsString:string)
 export async function autoComplete(words:string[],pattern:string):Promise<{type:'autocompleteitem',value:string,text:string}[]>
 {   pattern=pattern.replace(/@/g, '');
     let filteredResult=words.filter(word=>word.startsWith(pattern));
+    if(filteredResult.length == 0 )
+        filteredResult.push(`@`+pattern);
     
     return filteredResult.map(word=>({type:'autocompleteitem',value:word,text:word}))
 }

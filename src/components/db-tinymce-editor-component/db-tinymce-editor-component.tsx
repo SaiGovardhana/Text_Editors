@@ -30,7 +30,7 @@ let scriptOrigin=new URL(import.meta.url).origin;
 @Component({
   tag: 'db-tinymce-editor',
   styleUrl: 'db-tinymce-editor-component.css',
-  shadow: false,
+  shadow: true,
 })
 export class DbTinymceEditorComponent {
   //Id
@@ -132,13 +132,14 @@ export class DbTinymceEditorComponent {
 
     }
     
-
-    this.nativeTextAreaDOMElement=this.nativeEditorDOMElement.querySelector(`#${this.id}-underlying`);
+    //Remove .shadowRoot before querySelectoe when, shadow:false
+    this.nativeTextAreaDOMElement=this.nativeEditorDOMElement.shadowRoot.querySelector(`#${this.id}-underlying`);
     if(this.nativeTextAreaDOMElement!=null)
       {   
        tinymce.init({
           //DOM Element for transforming into RICH Editor
-          selector:`#${this.id}-underlying`,
+          //selector:`#${this.id}-underlying`,->Used when shawdowdom is false
+          target:this.nativeEditorDOMElement,
           //Dont Use Css For Content
           content_css: false,
           //Use The Css from above imports
@@ -163,6 +164,7 @@ export class DbTinymceEditorComponent {
           readonly:this.readOnly,
           //Set Height And Width
           height:this.editorHeight,
+          inline:false,
           width:this.editorWidth,
           //Set Up CallBack
           init_instance_callback:(editor)=>
