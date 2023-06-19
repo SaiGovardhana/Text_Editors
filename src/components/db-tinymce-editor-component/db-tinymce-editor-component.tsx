@@ -30,7 +30,7 @@ let scriptOrigin=new URL(import.meta.url).origin;
 @Component({
   tag: 'db-tinymce-editor',
   styleUrl: 'db-tinymce-editor-component.css',
-  shadow: true,
+  shadow: false,
 })
 export class DbTinymceEditorComponent {
   //Id
@@ -133,13 +133,13 @@ export class DbTinymceEditorComponent {
     }
     
     //Remove .shadowRoot before querySelectoe when, shadow:false
-    this.nativeTextAreaDOMElement=this.nativeEditorDOMElement.shadowRoot.querySelector(`#${this.id}-underlying`);
+    this.nativeTextAreaDOMElement=this.nativeEditorDOMElement.querySelector(`#${this.id}-underlying`);
     if(this.nativeTextAreaDOMElement!=null)
       {   
        tinymce.init({
           //DOM Element for transforming into RICH Editor
-          //selector:`#${this.id}-underlying`,->Used when shawdowdom is false
-          target:this.nativeEditorDOMElement,
+          selector:`#${this.id}-underlying`,//->Used when shawdowdom is false
+          //target:this.nativeEditorDOMElement,
           //Dont Use Css For Content
           content_css: false,
           //Use The Css from above imports
@@ -202,11 +202,13 @@ export class DbTinymceEditorComponent {
 
   render() {
     let content=this.editorHTMLContent;
+    console.log(content)
     if(content == null)
-      content=this.initialEditorHTMLContent;
+      content=this.initialEditorHTMLContent||this.initialEditorTextContent;
+      console.log(content)
     return (
       <Host>
-        <textarea id={this.id+"-underlying"}>{content}</textarea>
+        <textarea value={content} id={this.id+"-underlying"}></textarea>
       </Host>
     );
   }
