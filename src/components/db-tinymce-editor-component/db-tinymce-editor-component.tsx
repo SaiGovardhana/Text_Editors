@@ -202,10 +202,8 @@ export class DbTinymceEditorComponent {
 
   render() {
     let content=this.editorHTMLContent;
-    console.log(content)
     if(content == null)
       content=this.initialEditorHTMLContent||this.initialEditorTextContent;
-      console.log(content)
     return (
       <Host>
         <textarea value={content} id={this.id+"-underlying"}></textarea>
