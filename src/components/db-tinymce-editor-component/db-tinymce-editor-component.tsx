@@ -1,4 +1,4 @@
-import { Component, Host, h, Element, Prop, Event, EventEmitter } from '@stencil/core';
+import { Component, Host, h, Element, Prop, Event, EventEmitter, Watch } from '@stencil/core';
 /* Import TinyMCE */
 
 import tinymce, { Editor } from 'tinymce';
@@ -54,10 +54,6 @@ export class DbTinymceEditorComponent {
   //Editor Height
   @Prop({attribute:"editor-height"})
     editorHeight:string
-  @Prop({attribute:"editor-html-content"})
-    initialEditorHTMLContent:string
-  @Prop({attribute:"editor-text-content"})
-    initialEditorTextContent:string
   
   //Auto Complete Configuration
   @Prop({attribute:'enable-autocomplete'})
@@ -67,8 +63,28 @@ export class DbTinymceEditorComponent {
 
   
   //Internal Variables Used To Maintain Data between DOM insertion and deletion
+  @Prop({attribute:'editor-html-content',reflect:true,mutable:true})
   editorHTMLContent:string
+  @Prop({attribute:'editor-text-content',reflect:true,mutable:true})
   editorTextContent:string
+  editor:Editor
+
+  //Update content if any props change, triggers render
+  componentShouldUpdate()
+  { 
+    return true;
+  }
+
+  //Updates tinymce if content changed from outside
+  @Watch("editorHTMLContent")
+    updateChangeFromExternal()
+    {
+    
+    if(this.editor.getBody().innerHTML.localeCompare(this.editorHTMLContent) !=0 )
+      this.editor.setContent(this.editorHTMLContent)
+      
+    }
+
 
   //DOM Element For This Component, Injected By Stencil
   @Element() 
@@ -76,18 +92,13 @@ export class DbTinymceEditorComponent {
   //DOM Element For Text Area, that will the modified by TinyMCE
   private nativeTextAreaDOMElement:HTMLTextAreaElement;
 
-  @Event({eventName:"editorchange",bubbles:false})
+  @Event({eventName:"content-change",bubbles:false})
   editorInputChangeEvent:EventEmitter<EditorChangeEvent>;
 
   //Called Only Once, After first Render
   componentDidLoad()
   { console.log("[TinyMCE COMPONENT] Initial Load");
-    if(this.initialEditorTextContent == null)
-      this.editorTextContent="";
-    if(this.initialEditorHTMLContent == null)
-      this.editorHTMLContent=this.initialEditorTextContent;
-    else
-      this.editorHTMLContent=this.initialEditorHTMLContent;
+
     this.initEditor();
   
   }
@@ -117,9 +128,8 @@ export class DbTinymceEditorComponent {
             let textContent=editor.getBody().innerText;
             this.editorHTMLContent=htmlContent;
             this.editorTextContent=textContent;
-            this.nativeEditorDOMElement.dataset.editorHtmlContent=this.editorHTMLContent;
-            this.nativeEditorDOMElement.dataset.editorTextContent=this.editorTextContent;
-            this.editorInputChangeEvent.emit({htmlContent,textContent});
+            if(this.nativeEditorDOMElement.isConnected)
+              this.editorInputChangeEvent.emit({htmlContent,textContent});
             
   }
 
@@ -168,7 +178,7 @@ export class DbTinymceEditorComponent {
           width:this.editorWidth,
           //Set Up CallBack
           init_instance_callback:(editor)=>
-          {
+          { this.editor=editor
             let currentUpdateHandler=this.updateHandler.bind(this,editor);
             //Triggered When Input Typed
             editor.on('input',currentUpdateHandler);
@@ -180,8 +190,12 @@ export class DbTinymceEditorComponent {
             editor.on('init', ()=> {
               
                 let contentContainer = (editor.getContainer().querySelector('.tox-edit-area__iframe') as HTMLIFrameElement).contentDocument.body;
+                //Style to prevent text from wraping into two lines
                 contentContainer.style.whiteSpace = 'nowrap';
                 contentContainer.style.overflowX = 'auto';
+                //Modified Style For Square Border 
+                editor.getContainer().style.borderRadius="0px";
+                
                 //AutoComplete Functionality
                 if(this.enableAutoComplete==true && this.autoCompleteWordsString!=null)
                 {
@@ -190,7 +204,7 @@ export class DbTinymceEditorComponent {
                 let onActionCallback=onAction.bind(null,editor);
                 //Note: Couldn't Import Types
                 //@ts-ignore
-                editor.ui.registry.addAutocompleter("Demo",{matches:matchesCheck,trigger:"@",minChars:0,onAction:onActionCallback,fetch:autoCompleteFetchCallback})
+                editor.ui.registry.addAutocompleter("RootAutoCompleter",{matches:matchesCheck,trigger:"@",minChars:0,onAction:onActionCallback,fetch:autoCompleteFetchCallback})
                 }
             });
         }
@@ -201,12 +215,13 @@ export class DbTinymceEditorComponent {
   }
 
   render() {
+    
     let content=this.editorHTMLContent;
     if(content == null)
-      content=this.initialEditorHTMLContent||this.initialEditorTextContent;
+      content=this.editorTextContent;
     return (
       <Host>
-        <textarea value={content} id={this.id+"-underlying"}></textarea>
+          <textarea  id={this.id+"-underlying"}>{content}</textarea>
       </Host>
     );
   }

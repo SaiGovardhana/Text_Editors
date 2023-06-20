@@ -24,12 +24,12 @@ export namespace Components {
         "autoCompleteWordsString": string;
         "disableStatusBar": boolean;
         "disableToolbar": boolean;
+        "editorHTMLContent": string;
         "editorHeight": string;
+        "editorTextContent": string;
         "editorWidth": string;
         "enableAutoComplete": boolean;
         "id": string;
-        "initialEditorHTMLContent": string;
-        "initialEditorTextContent": string;
         "readOnly": boolean;
         "toolbarConfigString": string;
     }
@@ -76,13 +76,13 @@ declare namespace LocalJSX {
         "autoCompleteWordsString"?: string;
         "disableStatusBar"?: boolean;
         "disableToolbar"?: boolean;
+        "editorHTMLContent"?: string;
         "editorHeight"?: string;
+        "editorTextContent"?: string;
         "editorWidth"?: string;
         "enableAutoComplete"?: boolean;
         "id"?: string;
-        "initialEditorHTMLContent"?: string;
-        "initialEditorTextContent"?: string;
-        "onEditorchange"?: (event: DbTinymceEditorCustomEvent<EditorChangeEvent1>) => void;
+        "onContent-change"?: (event: DbTinymceEditorCustomEvent<EditorChangeEvent1>) => void;
         "readOnly"?: boolean;
         "toolbarConfigString": string;
     }

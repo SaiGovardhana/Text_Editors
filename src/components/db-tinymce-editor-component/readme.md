@@ -12,21 +12,21 @@
 | `autoCompleteWordsString`          | `autocomplete-words`  |             | `string`  | `undefined` |
 | `disableStatusBar`                 | `disable-statusbar`   |             | `boolean` | `undefined` |
 | `disableToolbar`                   | `disable-toolbar`     |             | `boolean` | `undefined` |
+| `editorHTMLContent`                | `editor-html-content` |             | `string`  | `undefined` |
 | `editorHeight`                     | `editor-height`       |             | `string`  | `undefined` |
+| `editorTextContent`                | `editor-text-content` |             | `string`  | `undefined` |
 | `editorWidth`                      | `editor-width`        |             | `string`  | `undefined` |
 | `enableAutoComplete`               | `enable-autocomplete` |             | `boolean` | `undefined` |
 | `id`                               | `id`                  |             | `string`  | `undefined` |
-| `initialEditorHTMLContent`         | `editor-html-content` |             | `string`  | `undefined` |
-| `initialEditorTextContent`         | `editor-text-content` |             | `string`  | `undefined` |
 | `readOnly`                         | `read-only`           |             | `boolean` | `false`     |
 | `toolbarConfigString` _(required)_ | `toolbar-config`      |             | `string`  | `undefined` |
 
 
 ## Events
 
-| Event          | Description | Type                                                         |
-| -------------- | ----------- | ------------------------------------------------------------ |
-| `editorchange` |             | `CustomEvent<{ htmlContent: string; textContent: string; }>` |
+| Event            | Description | Type                                                         |
+| ---------------- | ----------- | ------------------------------------------------------------ |
+| `content-change` |             | `CustomEvent<{ htmlContent: string; textContent: string; }>` |
 
 
 ----------------------------------------------
