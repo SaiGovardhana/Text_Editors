@@ -2,24 +2,7 @@ import { Component, Host, h, Element, Prop, Event, EventEmitter, Watch } from '@
 /* Import TinyMCE */
 
 import tinymce, { Editor } from 'tinymce';
-import  'tinymce/models/dom/model';
- /* Default icons are required for TinyMCE 5.3 or above */
-import 'tinymce/icons/default';
- /* A theme is also required */
-import 'tinymce/themes/silver';
- /* Import the skin */
-import 'tinymce/skins/ui/oxide/skin.css';
-/* Import plugins */
-import 'tinymce/plugins/advlist';
-import 'tinymce/plugins/code';
-import 'tinymce/plugins/emoticons';
-import 'tinymce/plugins/emoticons/js/emojis';
-import 'tinymce/plugins/link';
-import 'tinymce/plugins/lists';
-import 'tinymce/plugins/table';
-/* Import content css */
-import contentUiCss from 'tinymce/skins/ui/oxide/content.css';
-import contentCss from 'tinymce/skins/content/default/content.css';
+
 import { toolbarConfigParser } from './toolbar/ToolbarConfigParser.util';
 import { EditorChangeEvent } from './db-tinymce.types';
 import { autoComplete, matchesCheck, onAction, parseAutoCompleteWords } from './autocomplete/autocomplete.util';
@@ -46,7 +29,7 @@ export class DbTinymceEditorComponent {
   disableStatusBar:boolean
   //Read-only attribute
   
-  @Prop({attribute:"read-only"})
+  @Prop({attribute:"read-only",mutable:true,reflect:true})
   readOnly=false
   //Editor Width 
   @Prop({attribute:"editor-width"})
@@ -83,6 +66,15 @@ export class DbTinymceEditorComponent {
     if(this.editor.getBody().innerHTML.localeCompare(this.editorHTMLContent) !=0 )
       this.editor.setContent(this.editorHTMLContent)
       
+    }
+  //Updates Read Only Dynamically
+  @Watch("readOnly")
+    updateMode(newValue:boolean)
+    {
+      if(newValue)
+        this.editor.mode.set('readonly')
+      else
+        this.editor.mode.set('design')
     }
 
 
@@ -150,10 +142,6 @@ export class DbTinymceEditorComponent {
           //DOM Element for transforming into RICH Editor
           selector:`#${this.id}-underlying`,//->Used when shawdowdom is false
           //target:this.nativeEditorDOMElement,
-          //Dont Use Css For Content
-          content_css: false,
-          //Use The Css from above imports
-          content_style: contentUiCss.toString() + '\n' + contentCss.toString(),
           //Used to remove the editors branding
           branding:false,
           //Used to remove promition of upgrade
