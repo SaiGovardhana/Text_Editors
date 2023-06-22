@@ -1,3 +1,3 @@
 export type ToolbarOption=("bold"|"italic"|"blockQuote"|"code"|"font"|"fontSize"|
-                    "textColor"|"underline"|"orderedlist"|"unorderedlist"|"indent"|"strike"
-                    |"clean")                        
+                    "textColor"|"underline"|"orderedList"|"unOrderedList"|"indent"|"strike"
+                    |"clean"|"undoRedo"|"lineHeight"|"textAlign"|"backgroundColor"|"headers"|"copy")                        

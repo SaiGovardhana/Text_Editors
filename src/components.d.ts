@@ -30,6 +30,7 @@ export namespace Components {
         "editorWidth": string;
         "enableAutoComplete": boolean;
         "id": string;
+        "placeholder": string;
         "readOnly": boolean;
         "toolbarConfigString": string;
     }
@@ -83,6 +84,7 @@ declare namespace LocalJSX {
         "enableAutoComplete"?: boolean;
         "id"?: string;
         "onContent-change"?: (event: DbTinymceEditorCustomEvent<EditorChangeEvent1>) => void;
+        "placeholder"?: string;
         "readOnly"?: boolean;
         "toolbarConfigString": string;
     }

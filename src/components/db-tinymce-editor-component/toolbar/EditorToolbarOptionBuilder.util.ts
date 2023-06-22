@@ -1,3 +1,4 @@
+//Helper Class For Building The Options
 export class EditorToolbarOptionBuilder
 {   
     configObject!:any[];
@@ -16,7 +17,12 @@ export class EditorToolbarOptionBuilder
     addColorPicker(){this.configObject.push("forecolor")}
     addFontSelector(){this.configObject.push("fontfamily")}
     addSizeSelector(){this.configObject.push("fontsize")}
-    
+    addLineHeight(){this.configObject.push("lineheight")}
+    addUndoRedo(){this.configObject.push("undo","redo")}
+    addAlignments(){this.configObject.push("alignleft","aligncenter","alignright","alignjustify")}
+    addBackgroundColor(){this.configObject.push("backcolor")}
+    addHeaders(){this.configObject.push("blocks");}
+    addCopy(){this.configObject.push("copy")}
 
     build()
     {

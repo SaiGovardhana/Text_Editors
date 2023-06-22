@@ -29,10 +29,10 @@ export function toolbarConfigParser(configString:string)
             case "blockQuote":
                 configBuilder.addBlockQuote();
                 break;
-            case "orderedlist":
+            case "orderedList":
                 configBuilder.addOrderdList();
                 break;
-            case "unorderedlist":
+            case "unOrderedList":
                 configBuilder.addUnorderedList();
                 break;
             case "indent":
@@ -46,6 +46,24 @@ export function toolbarConfigParser(configString:string)
                 break;
             case "textColor":
                 configBuilder.addColorPicker();
+                break;
+            case "undoRedo":
+                configBuilder.addUndoRedo();
+                break;
+            case "lineHeight":
+                configBuilder.addLineHeight();
+                break;
+            case "textAlign":
+                configBuilder.addAlignments();
+                break;
+            case "backgroundColor":
+                    configBuilder.addBackgroundColor();
+                    break;
+            case "headers":
+                configBuilder.addHeaders();
+                break;
+            case "copy":
+                configBuilder.addCopy();
                 break;
             default:
                     console.error(`[ConfigParser.util.ts] Invalid Param For ToolBar Config Parser : ${option}`)

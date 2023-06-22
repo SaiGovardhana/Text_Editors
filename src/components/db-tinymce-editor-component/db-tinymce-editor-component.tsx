@@ -13,7 +13,7 @@ let scriptOrigin=new URL(import.meta.url).origin;
 @Component({
   tag: 'db-tinymce-editor',
   styleUrl: 'db-tinymce-editor-component.css',
-  shadow: false,
+  shadow:false,
 })
 export class DbTinymceEditorComponent {
   //Id
@@ -28,7 +28,6 @@ export class DbTinymceEditorComponent {
   @Prop({attribute:'disable-statusbar'})
   disableStatusBar:boolean
   //Read-only attribute
-  
   @Prop({attribute:"read-only",mutable:true,reflect:true})
   readOnly=false
   //Editor Width 
@@ -37,7 +36,8 @@ export class DbTinymceEditorComponent {
   //Editor Height
   @Prop({attribute:"editor-height"})
     editorHeight:string
-  
+  @Prop({attribute:'placeholder'})
+    placeholder:string
   //Auto Complete Configuration
   @Prop({attribute:'enable-autocomplete'})
     enableAutoComplete:boolean
@@ -63,7 +63,7 @@ export class DbTinymceEditorComponent {
     updateChangeFromExternal()
     {
     
-    if(this.editor.getBody().innerHTML.localeCompare(this.editorHTMLContent) !=0 )
+    if(this.editor.getContent({format:'html'}).localeCompare(this.editorHTMLContent) !=0 )
       this.editor.setContent(this.editorHTMLContent)
       
     }
@@ -99,8 +99,8 @@ export class DbTinymceEditorComponent {
   {
 
     console.log("[TinyMCE Component] Disconnecting. Cleaning Up ");
-    tinymce.get(`${this.id}-underlying`).destroy()
-
+    //tinymce.get(`${this.id}-underlying`).destroy()
+    this.editor.destroy()
   }
   //Called Everytime Connected to DOM
   connectedCallback()
@@ -116,8 +116,8 @@ export class DbTinymceEditorComponent {
   {
     
             
-            let htmlContent=editor.getBody().innerHTML;
-            let textContent=editor.getBody().innerText;
+            let htmlContent=editor.getContent({format:'html'});
+            let textContent=editor.getContent({format:'text'});
             this.editorHTMLContent=htmlContent;
             this.editorTextContent=textContent;
             if(this.nativeEditorDOMElement.isConnected)
@@ -127,7 +127,7 @@ export class DbTinymceEditorComponent {
 
   initEditor()
   {
-    let toolBarConfig="fontsize bold italic strikethrough indent outdent";
+    let toolBarConfig="undo redo blocks bold italic underline forecolor backcolor alignleft aligncenter alignright";
     if(this.toolbarConfigString!= null && this.toolbarConfigString.trim()!= "")
     {
       toolBarConfig=toolbarConfigParser(this.toolbarConfigString);
@@ -164,24 +164,27 @@ export class DbTinymceEditorComponent {
           height:this.editorHeight,
           inline:false,
           width:this.editorWidth,
+          placeholder:this.placeholder||"Enter Text Here",
+          block_formats: 'H1=h1;H2=h2;H3=h3;H4=h4;H5=h5;H6=h6;Paragraph=p',
           //Set Up CallBack
           init_instance_callback:(editor)=>
           { this.editor=editor
             let currentUpdateHandler=this.updateHandler.bind(this,editor);
             //Triggered When Input Typed
-            editor.on('input',currentUpdateHandler);
-            //Triggered For Change In Editor, like applying Bold, change font size .etc
-            editor.on('Change',currentUpdateHandler);
+            editor.on('input undo redo Change',currentUpdateHandler);
+
           },
           //Code To Fix Text wrapping to new-line instead of horizontal scroll And AutoComplete.
           setup:  (editor) =>{
             editor.on('init', ()=> {
               
-                let contentContainer = (editor.getContainer().querySelector('.tox-edit-area__iframe') as HTMLIFrameElement).contentDocument.body;
+                //Note:UnComment To Go TO Next Line Only When Enter Pressed
+               // let contentContainer = (editor.getContainer().querySelector('.tox-edit-area__iframe') as HTMLIFrameElement).contentDocument.body;
                 //Style to prevent text from wraping into two lines
-                contentContainer.style.whiteSpace = 'nowrap';
-                contentContainer.style.overflowX = 'auto';
-                //Modified Style For Square Border 
+               // contentContainer.style.whiteSpace = 'nowrap';
+               // contentContainer.style.overflowX = 'auto';
+                
+               //Modified Style For Square Border 
                 editor.getContainer().style.borderRadius="0px";
                 
                 //AutoComplete Functionality
