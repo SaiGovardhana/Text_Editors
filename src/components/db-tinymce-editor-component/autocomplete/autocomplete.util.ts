@@ -11,7 +11,7 @@ export async function autoComplete(words:string[],pattern:string):Promise<{type:
 {   pattern=pattern.replace(/@/g, '');
     let filteredResult=words.filter(word=>word.startsWith(pattern));
     if(filteredResult.length == 0 )
-        filteredResult.push(`@`+pattern);
+        return [{type:'autocompleteitem',value:"",text:"Couldn't Find Matching Words[ESC to exit}"}]
     
     return filteredResult.map(word=>({type:'autocompleteitem',value:word,text:word}))
 }

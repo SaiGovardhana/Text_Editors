@@ -18,6 +18,7 @@
 | `editorWidth`                      | `editor-width`        |             | `string`  | `undefined` |
 | `enableAutoComplete`               | `enable-autocomplete` |             | `boolean` | `undefined` |
 | `id`                               | `id`                  |             | `string`  | `undefined` |
+| `placeholder`                      | `placeholder`         |             | `string`  | `undefined` |
 | `readOnly`                         | `read-only`           |             | `boolean` | `false`     |
 | `toolbarConfigString` _(required)_ | `toolbar-config`      |             | `string`  | `undefined` |
 

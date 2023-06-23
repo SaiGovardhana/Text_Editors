@@ -62,7 +62,8 @@ export class DbTinymceEditorComponent {
   @Watch("editorHTMLContent")
     updateChangeFromExternal()
     {
-    
+    if(this.editor == null)
+      return;
     if(this.editor.getContent({format:'html'}).localeCompare(this.editorHTMLContent) !=0 )
       this.editor.setContent(this.editorHTMLContent)
       
@@ -71,6 +72,9 @@ export class DbTinymceEditorComponent {
   @Watch("readOnly")
     updateMode(newValue:boolean)
     {
+      if(this.editor == null)
+        return;
+
       if(newValue)
         this.editor.mode.set('readonly')
       else
@@ -100,6 +104,8 @@ export class DbTinymceEditorComponent {
 
     console.log("[TinyMCE Component] Disconnecting. Cleaning Up ");
     //tinymce.get(`${this.id}-underlying`).destroy()
+    if(this.editor == null)
+      return;
     this.editor.destroy()
   }
   //Called Everytime Connected to DOM
@@ -114,8 +120,9 @@ export class DbTinymceEditorComponent {
   //Called When there in change in TinyMCE
   updateHandler=(editor:Editor)=>
   {
-    
-            
+            if(this.editor == null)
+              return;
+            console.log(this.editor.getContent({format:'html'}))
             let htmlContent=editor.getContent({format:'html'});
             let textContent=editor.getContent({format:'text'});
             this.editorHTMLContent=htmlContent;
@@ -125,7 +132,7 @@ export class DbTinymceEditorComponent {
             
   }
 
-  initEditor()
+  async initEditor()
   {
     let toolBarConfig="undo redo blocks bold italic underline forecolor backcolor alignleft aligncenter alignright";
     if(this.toolbarConfigString!= null && this.toolbarConfigString.trim()!= "")
@@ -138,7 +145,8 @@ export class DbTinymceEditorComponent {
     this.nativeTextAreaDOMElement=this.nativeEditorDOMElement.querySelector(`#${this.id}-underlying`);
     if(this.nativeTextAreaDOMElement!=null)
       {   
-       tinymce.init({
+      try{
+       await tinymce.init({
           //DOM Element for transforming into RICH Editor
           selector:`#${this.id}-underlying`,//->Used when shawdowdom is false
           //target:this.nativeEditorDOMElement,
@@ -171,13 +179,14 @@ export class DbTinymceEditorComponent {
           { this.editor=editor
             let currentUpdateHandler=this.updateHandler.bind(this,editor);
             //Triggered When Input Typed
-            editor.on('input undo redo Change',currentUpdateHandler);
-
+            editor.on('input undo redo Change',(e)=>{console.log(e);currentUpdateHandler()});
+            
           },
           //Code To Fix Text wrapping to new-line instead of horizontal scroll And AutoComplete.
           setup:  (editor) =>{
             editor.on('init', ()=> {
-              
+
+
                 //Note:UnComment To Go TO Next Line Only When Enter Pressed
                // let contentContainer = (editor.getContainer().querySelector('.tox-edit-area__iframe') as HTMLIFrameElement).contentDocument.body;
                 //Style to prevent text from wraping into two lines
@@ -200,7 +209,17 @@ export class DbTinymceEditorComponent {
             });
         }
         });
+        if(!this.nativeEditorDOMElement.isConnected)
+        { 
+          this.editor.destroy();
+        }
         
+      }
+      catch(E)
+      {
+        console.log("[TinyMCE Component]Error While Initalizing TinyMCE");
+      }
+      
       }
   
   }
