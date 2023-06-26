@@ -20,6 +20,16 @@ export namespace Components {
         "readOnly": boolean;
         "toolbarConfigString": string;
     }
+    interface DbSummernoteEditorComponent {
+        "disableToolbar": boolean;
+        "editorHTMLContent": string;
+        "editorHeight": string;
+        "editorWidth": string;
+        "id": string;
+        "placeholder": string;
+        "readOnly": boolean;
+        "toolbarConfigString": string;
+    }
     interface DbTinymceEditor {
         "autoCompleteWordsString": string;
         "baseUrl": string;
@@ -40,6 +50,10 @@ export interface DbQuillEditorCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLDbQuillEditorElement;
 }
+export interface DbSummernoteEditorComponentCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLDbSummernoteEditorComponentElement;
+}
 export interface DbTinymceEditorCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLDbTinymceEditorElement;
@@ -51,6 +65,12 @@ declare global {
         prototype: HTMLDbQuillEditorElement;
         new (): HTMLDbQuillEditorElement;
     };
+    interface HTMLDbSummernoteEditorComponentElement extends Components.DbSummernoteEditorComponent, HTMLStencilElement {
+    }
+    var HTMLDbSummernoteEditorComponentElement: {
+        prototype: HTMLDbSummernoteEditorComponentElement;
+        new (): HTMLDbSummernoteEditorComponentElement;
+    };
     interface HTMLDbTinymceEditorElement extends Components.DbTinymceEditor, HTMLStencilElement {
     }
     var HTMLDbTinymceEditorElement: {
@@ -59,6 +79,7 @@ declare global {
     };
     interface HTMLElementTagNameMap {
         "db-quill-editor": HTMLDbQuillEditorElement;
+        "db-summernote-editor-component": HTMLDbSummernoteEditorComponentElement;
         "db-tinymce-editor": HTMLDbTinymceEditorElement;
     }
 }
@@ -73,6 +94,17 @@ declare namespace LocalJSX {
         "onEditorchange"?: (event: DbQuillEditorCustomEvent<EditorChangeEvent>) => void;
         "readOnly"?: boolean;
         "toolbarConfigString": string;
+    }
+    interface DbSummernoteEditorComponent {
+        "disableToolbar"?: boolean;
+        "editorHTMLContent"?: string;
+        "editorHeight"?: string;
+        "editorWidth"?: string;
+        "id"?: string;
+        "onContent-change"?: (event: DbSummernoteEditorComponentCustomEvent<{htmlContent:string}>) => void;
+        "placeholder"?: string;
+        "readOnly"?: boolean;
+        "toolbarConfigString"?: string;
     }
     interface DbTinymceEditor {
         "autoCompleteWordsString"?: string;
@@ -92,6 +124,7 @@ declare namespace LocalJSX {
     }
     interface IntrinsicElements {
         "db-quill-editor": DbQuillEditor;
+        "db-summernote-editor-component": DbSummernoteEditorComponent;
         "db-tinymce-editor": DbTinymceEditor;
     }
 }
@@ -100,6 +133,7 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "db-quill-editor": LocalJSX.DbQuillEditor & JSXBase.HTMLAttributes<HTMLDbQuillEditorElement>;
+            "db-summernote-editor-component": LocalJSX.DbSummernoteEditorComponent & JSXBase.HTMLAttributes<HTMLDbSummernoteEditorComponentElement>;
             "db-tinymce-editor": LocalJSX.DbTinymceEditor & JSXBase.HTMLAttributes<HTMLDbTinymceEditorElement>;
         }
     }
