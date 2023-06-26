@@ -22,6 +22,7 @@ export namespace Components {
     }
     interface DbTinymceEditor {
         "autoCompleteWordsString": string;
+        "baseUrl": string;
         "disableStatusBar": boolean;
         "disableToolbar": boolean;
         "editorHTMLContent": string;
@@ -75,6 +76,7 @@ declare namespace LocalJSX {
     }
     interface DbTinymceEditor {
         "autoCompleteWordsString"?: string;
+        "baseUrl"?: string;
         "disableStatusBar"?: boolean;
         "disableToolbar"?: boolean;
         "editorHTMLContent"?: string;
