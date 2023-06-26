@@ -1,7 +1,9 @@
 import { Component, Host, h, ComponentDidLoad, Element, Prop, Watch, Event, EventEmitter } from '@stencil/core';
 import { toolbarConfigParser } from './toolbar/ToolbarConfigParser.util';
 
-
+import '../../assets/summernote/jquery.min.js'
+import '../../assets/summernote/bootstrap.bundle.min.js'
+import '../../assets/summernote/summernote.min.js'
 
 @Component({
   tag: 'db-summernote-editor-component',

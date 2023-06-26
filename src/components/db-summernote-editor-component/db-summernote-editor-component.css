@@ -1,3 +1,9 @@
+@import url(../../assets/summernote/bootstrap.min.css);
+@import url(../../assets/summernote/summernote.min.css);
+@font-face {
+  font-family: summernote;
+  src: url(../../assets/summernote/summernote.woff2);
+}
 :host {
   display: block;
 }
