@@ -1,10 +1,12 @@
 import { Component, Host, h, ComponentDidLoad, Element, Prop, Watch, Event, EventEmitter } from '@stencil/core';
 import { toolbarConfigParser } from './toolbar/ToolbarConfigParser.util';
 
-import '../../assets/summernote/jquery.min.js'
-import '../../assets/summernote/bootstrap.bundle.min.js'
-import '../../assets/summernote/summernote.min.js'
+// import '../../assets/summernote/jquery.min.js'
+// import '../../assets/summernote/bootstrap.bundle.min.js'
+// import '../../assets/summernote/summernote.min.js'
 
+import '../../assets/summernote/jquery.slim.min.js'
+import "../../assets/summernote/summernote-lite.min.js"
 @Component({
   tag: 'db-summernote-editor-component',
   styleUrl: 'db-summernote-editor-component.css',
@@ -54,8 +56,15 @@ export class DbSummernoteEditorComponent implements ComponentDidLoad{
 
   @Watch("editorHTMLContent")
     externalHTMLUpdate(newValue)
-    {       //@ts-ignore
-      
+    { 
+      //Prevent Text Being Empty, For Visual Purpose
+      if(newValue==""){
+      //@ts-ignore
+        $(this.el).find(".db-underlying-textarea").summernote("code","<p><br></p>")
+        return ;
+      }
+
+      //@ts-ignore
       if(newValue==null||newValue.localeCompare($(this.el).find(".db-underlying-textarea").summernote("code")))
       {
 
@@ -83,14 +92,15 @@ export class DbSummernoteEditorComponent implements ComponentDidLoad{
         //@ts-ignore
         //Initalize Editor
         $(this.el).find(".db-underlying-textarea").summernote(
-          { contents:this.editorHTMLContent||"SS",
+          { contents:this.editorHTMLContent,
             toolbar:parsedConfig,
-            placeholder:this.placeholder,
+            placeholder:"<p>"+this.placeholder.replace(/</g, '&lt;').replace(/>/g, '&gt;')+"</p>",
             width:this.editorWidth,
             height:this.editorHeight,
             disableDragAndDrop : true,
             shortcuts:!this.disableToolbar,
             disabled:this.readOnly,
+            spellCheck:false,
             callbacks:{
 
               onChange:(content:string)=>this.updateContent(content)

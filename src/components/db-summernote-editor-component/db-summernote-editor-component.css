@@ -1,5 +1,5 @@
-@import url(../../assets/summernote/bootstrap.min.css);
-@import url(../../assets/summernote/summernote.min.css);
+
+@import url(../../assets/summernote/summernote-lite.min.css);
 @font-face {
   font-family: summernote;
   src: url(../../assets/summernote/summernote.woff2);
@@ -17,6 +17,34 @@
   display: none !important;
 }
 
+
+
+.note-dropdown-menu
+{ 
+    height: max-content;
+    max-height: 170px !important;
+    overflow-y:auto;
+}
+
+.note-btn
+{
+    background-color: white;
+    border:none !important;
+}
+.note-btn:hover,.note-btn-primary:focus,.note-icon:hover,.active
+{
+    border: none !important;
+    background-color: rgba(6, 145, 187, 0.4) !important;
+    
+}
+
+.note-toolbar
+{
+    border: none;
+    background-color: white;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+
+}
 
 
 
