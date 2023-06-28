@@ -3,7 +3,7 @@ import { toolbarConfigParser } from './toolbar/ToolbarConfigParser.util';
 
 
 @Component({
-  tag: 'stencil-sandbox-editor',
+  tag: 'db-sandbox-editor',
   styleUrl: 'stencil-sandbox-editor-component.css',
   shadow: true,
 })
@@ -40,16 +40,16 @@ export class StencilSandboxEditorComponent {
   @Watch('readOnly')
   watchReadOnly(newValue:boolean)
   {
-    this.messageChannel.port1.postMessage({eventType:'read-only-change',readOnly:newValue})
+    this.messageChannel?.port1.postMessage({eventType:'read-only-change',readOnly:newValue})
   }
 
   @Watch('editorHTMLContent')
   watchHtmlContent(newValue:string)
   { 
-    
+    if(this.messageChannel!=null){
     this.contentChangeEmitter.emit({htmlContent:newValue});
-    this.messageChannel.port1.postMessage({eventType:'content-change',content:newValue})
-    
+    this.messageChannel?.port1.postMessage({eventType:'content-change',content:newValue})
+    }
   }
 
   //Initialize Component

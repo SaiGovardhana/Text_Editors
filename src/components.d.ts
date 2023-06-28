@@ -20,6 +20,15 @@ export namespace Components {
         "readOnly": boolean;
         "toolbarConfigString": string;
     }
+    interface DbSandboxEditor {
+        "disableToolbar": boolean;
+        "editorHTMLContent": string;
+        "editorHeight": string;
+        "editorWidth": 'string';
+        "placeholder": string;
+        "readOnly": boolean;
+        "toolbarConfigString": string;
+    }
     interface DbSummernoteEditorComponent {
         "disableToolbar": boolean;
         "editorHTMLContent": string;
@@ -45,19 +54,14 @@ export namespace Components {
         "readOnly": boolean;
         "toolbarConfigString": string;
     }
-    interface StencilSandboxEditor {
-        "disableToolbar": boolean;
-        "editorHTMLContent": string;
-        "editorHeight": string;
-        "editorWidth": 'string';
-        "placeholder": string;
-        "readOnly": boolean;
-        "toolbarConfigString": string;
-    }
 }
 export interface DbQuillEditorCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLDbQuillEditorElement;
+}
+export interface DbSandboxEditorCustomEvent<T> extends CustomEvent<T> {
+    detail: T;
+    target: HTMLDbSandboxEditorElement;
 }
 export interface DbSummernoteEditorComponentCustomEvent<T> extends CustomEvent<T> {
     detail: T;
@@ -67,16 +71,18 @@ export interface DbTinymceEditorCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLDbTinymceEditorElement;
 }
-export interface StencilSandboxEditorCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLStencilSandboxEditorElement;
-}
 declare global {
     interface HTMLDbQuillEditorElement extends Components.DbQuillEditor, HTMLStencilElement {
     }
     var HTMLDbQuillEditorElement: {
         prototype: HTMLDbQuillEditorElement;
         new (): HTMLDbQuillEditorElement;
+    };
+    interface HTMLDbSandboxEditorElement extends Components.DbSandboxEditor, HTMLStencilElement {
+    }
+    var HTMLDbSandboxEditorElement: {
+        prototype: HTMLDbSandboxEditorElement;
+        new (): HTMLDbSandboxEditorElement;
     };
     interface HTMLDbSummernoteEditorComponentElement extends Components.DbSummernoteEditorComponent, HTMLStencilElement {
     }
@@ -90,17 +96,11 @@ declare global {
         prototype: HTMLDbTinymceEditorElement;
         new (): HTMLDbTinymceEditorElement;
     };
-    interface HTMLStencilSandboxEditorElement extends Components.StencilSandboxEditor, HTMLStencilElement {
-    }
-    var HTMLStencilSandboxEditorElement: {
-        prototype: HTMLStencilSandboxEditorElement;
-        new (): HTMLStencilSandboxEditorElement;
-    };
     interface HTMLElementTagNameMap {
         "db-quill-editor": HTMLDbQuillEditorElement;
+        "db-sandbox-editor": HTMLDbSandboxEditorElement;
         "db-summernote-editor-component": HTMLDbSummernoteEditorComponentElement;
         "db-tinymce-editor": HTMLDbTinymceEditorElement;
-        "stencil-sandbox-editor": HTMLStencilSandboxEditorElement;
     }
 }
 declare namespace LocalJSX {
@@ -114,6 +114,16 @@ declare namespace LocalJSX {
         "onEditorchange"?: (event: DbQuillEditorCustomEvent<EditorChangeEvent>) => void;
         "readOnly"?: boolean;
         "toolbarConfigString": string;
+    }
+    interface DbSandboxEditor {
+        "disableToolbar"?: boolean;
+        "editorHTMLContent"?: string;
+        "editorHeight"?: string;
+        "editorWidth"?: 'string';
+        "onContent-change"?: (event: DbSandboxEditorCustomEvent<{htmlContent:string}>) => void;
+        "placeholder"?: string;
+        "readOnly"?: boolean;
+        "toolbarConfigString"?: string;
     }
     interface DbSummernoteEditorComponent {
         "disableToolbar"?: boolean;
@@ -142,21 +152,11 @@ declare namespace LocalJSX {
         "readOnly"?: boolean;
         "toolbarConfigString": string;
     }
-    interface StencilSandboxEditor {
-        "disableToolbar"?: boolean;
-        "editorHTMLContent"?: string;
-        "editorHeight"?: string;
-        "editorWidth"?: 'string';
-        "onContent-change"?: (event: StencilSandboxEditorCustomEvent<{htmlContent:string}>) => void;
-        "placeholder"?: string;
-        "readOnly"?: boolean;
-        "toolbarConfigString"?: string;
-    }
     interface IntrinsicElements {
         "db-quill-editor": DbQuillEditor;
+        "db-sandbox-editor": DbSandboxEditor;
         "db-summernote-editor-component": DbSummernoteEditorComponent;
         "db-tinymce-editor": DbTinymceEditor;
-        "stencil-sandbox-editor": StencilSandboxEditor;
     }
 }
 export { LocalJSX as JSX };
@@ -164,9 +164,9 @@ declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
             "db-quill-editor": LocalJSX.DbQuillEditor & JSXBase.HTMLAttributes<HTMLDbQuillEditorElement>;
+            "db-sandbox-editor": LocalJSX.DbSandboxEditor & JSXBase.HTMLAttributes<HTMLDbSandboxEditorElement>;
             "db-summernote-editor-component": LocalJSX.DbSummernoteEditorComponent & JSXBase.HTMLAttributes<HTMLDbSummernoteEditorComponentElement>;
             "db-tinymce-editor": LocalJSX.DbTinymceEditor & JSXBase.HTMLAttributes<HTMLDbTinymceEditorElement>;
-            "stencil-sandbox-editor": LocalJSX.StencilSandboxEditor & JSXBase.HTMLAttributes<HTMLStencilSandboxEditorElement>;
         }
     }
 }
