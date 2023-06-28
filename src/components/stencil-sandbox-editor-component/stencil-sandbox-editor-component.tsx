@@ -3,7 +3,7 @@ import { toolbarConfigParser } from './toolbar/ToolbarConfigParser.util';
 
 
 @Component({
-  tag: 'stencil-sandbox-editor-component',
+  tag: 'stencil-sandbox-editor',
   styleUrl: 'stencil-sandbox-editor-component.css',
   shadow: true,
 })
@@ -24,15 +24,17 @@ export class StencilSandboxEditorComponent {
     editorHeight:string="300px"
 
   @Prop({attribute:'toolbar-config'})
-    toolbarConfigString:string='bold'
+    toolbarConfigString:string='undoRedo|bold|underline|strike|fontSize|font|headers|textColor|backgroundColor|unOrderedList|orderedList|textAlign'
   @Prop({attribute:'placeholder'})
-    placeholder:string='This Is A Demo Placeholder'
+    placeholder:string='Enter Text....'
   editorIframe:HTMLIFrameElement;
 
   @Event({eventName:'content-change',bubbles:false})
     contentChangeEmitter:EventEmitter<{htmlContent:string}>
   //Used To Communicate with iframe
-  messageChannel=new MessageChannel();
+  messageChannel!:MessageChannel
+
+  isIntializedOnce:boolean
 
   
   @Watch('readOnly')
@@ -44,15 +46,16 @@ export class StencilSandboxEditorComponent {
   @Watch('editorHTMLContent')
   watchHtmlContent(newValue:string)
   { 
-    if(newValue==""||newValue==null)
-      newValue="<p><br></p>"
+    
     this.contentChangeEmitter.emit({htmlContent:newValue});
     this.messageChannel.port1.postMessage({eventType:'content-change',content:newValue})
+    
   }
 
   //Initialize Component
   initializeComponent()
   {
+    this.messageChannel=new MessageChannel();
     this.editorIframe=this.el.shadowRoot.querySelector("iframe");
     this.editorIframe.onload=()=>this.initIframeCallback();
     
@@ -74,7 +77,7 @@ export class StencilSandboxEditorComponent {
 
   //Send Initial Config,Content,Read-Only
   initIframeCallback()
-  {
+  { 
     //Send IFrame to Initialize Editor in IFrame
     this.editorIframe.contentWindow.postMessage({eventType:'init-editor',placeholder:this.placeholder,config:this.disableToolbar?false:toolbarConfigParser(this.toolbarConfigString),editorHeight:this.editorHeight,content:this.editorHTMLContent,readOnly:this.readOnly},"*",[this.messageChannel.port2]);
     this.messageChannel.port1.onmessage=this.messageHandler;
@@ -82,6 +85,12 @@ export class StencilSandboxEditorComponent {
   //Handle Message From IFrame
   messageHandler=(event:MessageEvent<{eventType:string,content:string}>)=>
   { 
+    //Edge Case When Web Component Destroyed, but iframe is still pending
+    if(this.editorIframe==null)
+    {
+      console.warn("[SummerNote SandBox Component] Message Recieved From Iframe After Component Disconnected!!!")
+      return;
+    }
     let {eventType,content}=event.data;
     switch(eventType)
     {
@@ -97,10 +106,34 @@ export class StencilSandboxEditorComponent {
 
   }
 
+  //Disconnecting From DOM
+  disconnectedCallback()
+  {
+    if(this.messageChannel!=null)
+      this.messageChannel.port1.close();
+    console.log("[SummerNote Sandbox Component] Disconnecting From DOM!!!");
+    
+    //Edge Case Debug when component disconnected before iframe initialized.
+    if(this.editorIframe!=null)
+      this.editorIframe.onload=()=>{console.warn("[SummerNote SandBox Component] Early Disconnecting Before IFrame Load!!!")};
+    
+    this.editorIframe=null;
+  }
+  //Connecting To Dom
+  connectedCallback()
+  {
+    if(this.isIntializedOnce)
+    {
+      this.initializeComponent();
+      console.log("[SummerNote Sandbox Component] Reconnecting To DOM!!!");
+    }
+  }
 
   componentDidLoad()
   {
+    console.log("[SummerNote Sandbox Component] Initialzing Component!!!");
     this.initializeComponent()
+    this.isIntializedOnce=true;
   }
   render() {
     

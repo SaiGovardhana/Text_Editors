@@ -1,7 +1,14 @@
-let isInitComplete=false;
-let messageChannel=null;
+//Communcation Port Sent From WebComponent, Initialized in init-editor callback
 let port=null;
+//Used For DebounceType
 let lastTimeout=null;
+//Store the lastContent Of Editor, set in onChange Of SummerNote
+let lastContent=null;
+
+/**
+ * Message Handler For Callback
+ * @param {MessageEvent<{eventType:string,readonly?:boolean,content?:string}>} e 
+ */
 const MessageHandler=(e)=>
 {
     
@@ -24,22 +31,46 @@ const MessageHandler=(e)=>
 
 }
 
+//First Message Handled By Window As No Port Recieved at this point
+//After message passing happens through port
 window.onmessage=MessageHandler
 
+/**
+ * 
+ * @param {MessageEvent<{ports:Array<MessagePort>}>} e 
+ */
 function onInitMessage(e)
 {
     port=e.ports[0];
-    port.onmessage=MessageHandler
+    port.onmessage=MessageHandler;
     initializeEditor(e.data.placeholder,e.data.config,e.data.editorHeight,e.data.content,e.data.readOnly);
 
 }
 
+/**
+ *Callback helper when content change message sent from web component 
+ * @param {MessageEvent<{eventType:string,content?:string}>} e 
+ */
 function onContentChange(e)
 {   
-    if(e.data.content.localeCompare($("#summernote").summernote("code"))!=0)
+    //Change Content From OutSide IFrame
+    if(e.data.content.localeCompare(lastContent)!=0)
+    {
+        if(lastTimeout!=null)
+            clearTimeout(lastTimeout);
+
         $("#summernote").summernote("code",e.data.content);
+        lastContent=e.data.content;
+
+
+    }
+    
 }
 
+/**
+ * 
+ * @param {MessageEvent<{readOnly:boolean}>} e 
+ */
 function onReadOnlyChange(e)
 {
     if(e.data.readOnly)
@@ -47,9 +78,16 @@ function onReadOnlyChange(e)
     else
         $("#summernote").summernote('enable');
 }
-
+/**
+ * Initialize The SummerNote Editor
+ * @param {string} placeholder 
+ * @param {any} toolBarConfig 
+ * @param {string} editorHeight 
+ * @param {string} content 
+ * @param {boolean} isReadOnly 
+ */
 function initializeEditor(placeholder,toolBarConfig,editorHeight,content,isReadOnly)
-{   
+{       lastContent=content;
         let config={
             placeholder: "<p>"+placeholder.replace(/</g, '&lt;').replace(/>/g, '&gt;')+"</p>",
             height: editorHeight,
@@ -62,9 +100,14 @@ function initializeEditor(placeholder,toolBarConfig,editorHeight,content,isReadO
                 onInit:()=>port.postMessage({eventType:'init-summernote'}),
                 onChange:(contents)=>{
                     //Debounce
+                    if(contents=="")
+                    {    $("#summernote").summernote("code","<p><br></p>");
+                        contents="<p><br></p>";
+                    }
+                
                     if(lastTimeout!=null)
                         clearTimeout(lastTimeout);
-                    lastTimeout=setTimeout(()=>port.postMessage({eventType:'editor-content-change',content:contents}),250)
+                    lastTimeout=setTimeout(()=>{lastContent=contents;port.postMessage({eventType:'editor-content-change',content:contents})},100)
                 }
             }
           }
