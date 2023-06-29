@@ -4,6 +4,8 @@ let port=null;
 let lastTimeout=null;
 //Store the lastContent Of Editor, set in onChange Of SummerNote
 let lastContent=null;
+//Last Timeout For Resize Event
+let lastResizeTimeout=null;
 
 /**
  * Message Handler For Callback
@@ -31,9 +33,21 @@ const MessageHandler=(e)=>
 
 }
 
+
 //First Message Handled By Window As No Port Recieved at this point
 //After message passing happens through port
 window.onmessage=MessageHandler
+
+//Resize Event Listener Send Message To Parent
+window.onresize=()=>
+{
+    if(port!=null)
+    {
+        if(lastResizeTimeout!=null)
+            clearTimeout(lastResizeTimeout)
+        lastResizeTimeout=setTimeout(()=>port.postMessage({eventType:'editor-resize'}),100);
+    }
+}
 
 /**
  * 
@@ -107,7 +121,7 @@ function initializeEditor(placeholder,toolBarConfig,editorHeight,content,isReadO
                 
                     if(lastTimeout!=null)
                         clearTimeout(lastTimeout);
-                    lastTimeout=setTimeout(()=>{lastContent=contents;port.postMessage({eventType:'editor-content-change',content:contents})},100)
+                    lastTimeout=setTimeout(()=>{lastContent=contents;if(port!=null)port.postMessage({eventType:'editor-content-change',content:contents})},100)
                 }
             }
           }

@@ -15,7 +15,7 @@
 | `editorWidth`         | `editor-width`        |             | `"string"` | `undefined`                                                                                                                       |
 | `placeholder`         | `placeholder`         |             | `string`   | `'Enter Text....'`                                                                                                                |
 | `readOnly`            | `read-only`           |             | `boolean`  | `false`                                                                                                                           |
-| `toolbarConfigString` | `toolbar-config`      |             | `string`   | `'undoRedo\|bold\|underline\|strike\|fontSize\|font\|headers\|textColor\|backgroundColor\|unOrderedList\|orderedList\|textAlign'` |
+| `toolbarConfigString` | `toolbar-config`      |             | `string`   | `'undoRedo\|headers\|bold\|underline\|strike\|fontSize\|font\|textColor\|backgroundColor\|unOrderedList\|orderedList\|textAlign'` |
 
 
 ## Events

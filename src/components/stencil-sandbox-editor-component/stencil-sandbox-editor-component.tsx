@@ -104,6 +104,9 @@ export class StencilSandboxEditorComponent {
       case 'editor-content-change':
         this.updateContentCallback(content);
         break;
+      case 'editor-resize':
+        this.initHeight();
+        break;
 
 
     }
@@ -142,9 +145,9 @@ export class StencilSandboxEditorComponent {
   render() {
     
     return (
-      //srcDoc={IframeHtml} style={{width:this.editorWidth}}
+    
       <Host>
-        <iframe srcDoc={iframeHtmlCode}></iframe>
+        <iframe style={{width:this.editorWidth}} srcDoc={iframeHtmlCode}></iframe>
       </Host>
     );
   }
