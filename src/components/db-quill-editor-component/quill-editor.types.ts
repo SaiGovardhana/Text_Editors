@@ -1,1 +1,0 @@
-export type EditorChangeEvent={htmlContent:string,textContent:string}

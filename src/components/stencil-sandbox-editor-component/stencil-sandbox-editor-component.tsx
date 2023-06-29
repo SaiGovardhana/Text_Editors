@@ -1,6 +1,9 @@
 import { Component, Host, h, Element, Prop, Watch, Event, EventEmitter } from '@stencil/core';
 import { toolbarConfigParser } from './toolbar/ToolbarConfigParser.util';
-import { IframeHtml } from './iframe-content/Iframe.data';
+
+//Get HTML code for iframe
+//@ts-ignore
+import iframeHtmlCode from '../../assets/summernote/summernote.iframe.min.html'
 
 
 @Component({
@@ -25,7 +28,7 @@ export class StencilSandboxEditorComponent {
     editorHeight:string="300px"
 
   @Prop({attribute:'toolbar-config'})
-    toolbarConfigString:string='undoRedo|bold|underline|strike|fontSize|font|headers|textColor|backgroundColor|unOrderedList|orderedList|textAlign'
+    toolbarConfigString:string='undoRedo|headers|bold|underline|strike|fontSize|font|textColor|backgroundColor|unOrderedList|orderedList|textAlign'
   @Prop({attribute:'placeholder'})
     placeholder:string='Enter Text....'
   editorIframe:HTMLIFrameElement;
@@ -139,8 +142,9 @@ export class StencilSandboxEditorComponent {
   render() {
     
     return (
+      //srcDoc={IframeHtml} style={{width:this.editorWidth}}
       <Host>
-        <iframe srcDoc={IframeHtml} style={{width:this.editorWidth}}  src='/assets/summernote/summernote.iframe.html'></iframe>
+        <iframe srcDoc={iframeHtmlCode}></iframe>
       </Host>
     );
   }

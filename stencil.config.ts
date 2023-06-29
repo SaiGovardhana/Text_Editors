@@ -1,13 +1,10 @@
 import { Config } from '@stencil/core';
-import nodePolyfills from 'rollup-plugin-node-polyfills';
-
+import { rollup } from 'rollup';
+//@ts-ignore
+import html from 'rollup-plugin-html'
 export const config: Config = {
   namespace: 'editors',
-  rollupPlugins: {
-    after: [
-      nodePolyfills(),
-    ]
-  },
+
   outputTargets: [
     {
       type: 'dist',
@@ -26,4 +23,8 @@ export const config: Config = {
       serviceWorker: null, // disable service workers
     }
   ],
+
+  plugins:[html({includes:"**/summernote.iframe.min.html",transform(html){return html.toString()}})],
+ 
+
 };

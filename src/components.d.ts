@@ -5,36 +5,14 @@
  * It contains typing information for all components that exist in this project.
  */
 import { HTMLStencilElement, JSXBase } from "@stencil/core/internal";
-import { EditorChangeEvent } from "./components/db-quill-editor-component/quill-editor.types";
-import { EditorChangeEvent as EditorChangeEvent1 } from "./components/db-tinymce-editor-component/db-tinymce.types";
-export { EditorChangeEvent } from "./components/db-quill-editor-component/quill-editor.types";
-export { EditorChangeEvent as EditorChangeEvent1 } from "./components/db-tinymce-editor-component/db-tinymce.types";
+import { EditorChangeEvent } from "./components/db-tinymce-editor-component/db-tinymce.types";
+export { EditorChangeEvent } from "./components/db-tinymce-editor-component/db-tinymce.types";
 export namespace Components {
-    interface DbQuillEditor {
-        "disableToolbar": boolean;
-        "editorHeight": string;
-        "editorWidth": string;
-        "id": string|null;
-        "initalEditorHtmlContent": string|null;
-        "initialEditorTextContent": string|null;
-        "readOnly": boolean;
-        "toolbarConfigString": string;
-    }
     interface DbSandboxEditor {
         "disableToolbar": boolean;
         "editorHTMLContent": string;
         "editorHeight": string;
         "editorWidth": 'string';
-        "placeholder": string;
-        "readOnly": boolean;
-        "toolbarConfigString": string;
-    }
-    interface DbSummernoteEditorComponent {
-        "disableToolbar": boolean;
-        "editorHTMLContent": string;
-        "editorHeight": string;
-        "editorWidth": string;
-        "id": string;
         "placeholder": string;
         "readOnly": boolean;
         "toolbarConfigString": string;
@@ -55,40 +33,20 @@ export namespace Components {
         "toolbarConfigString": string;
     }
 }
-export interface DbQuillEditorCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLDbQuillEditorElement;
-}
 export interface DbSandboxEditorCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLDbSandboxEditorElement;
-}
-export interface DbSummernoteEditorComponentCustomEvent<T> extends CustomEvent<T> {
-    detail: T;
-    target: HTMLDbSummernoteEditorComponentElement;
 }
 export interface DbTinymceEditorCustomEvent<T> extends CustomEvent<T> {
     detail: T;
     target: HTMLDbTinymceEditorElement;
 }
 declare global {
-    interface HTMLDbQuillEditorElement extends Components.DbQuillEditor, HTMLStencilElement {
-    }
-    var HTMLDbQuillEditorElement: {
-        prototype: HTMLDbQuillEditorElement;
-        new (): HTMLDbQuillEditorElement;
-    };
     interface HTMLDbSandboxEditorElement extends Components.DbSandboxEditor, HTMLStencilElement {
     }
     var HTMLDbSandboxEditorElement: {
         prototype: HTMLDbSandboxEditorElement;
         new (): HTMLDbSandboxEditorElement;
-    };
-    interface HTMLDbSummernoteEditorComponentElement extends Components.DbSummernoteEditorComponent, HTMLStencilElement {
-    }
-    var HTMLDbSummernoteEditorComponentElement: {
-        prototype: HTMLDbSummernoteEditorComponentElement;
-        new (): HTMLDbSummernoteEditorComponentElement;
     };
     interface HTMLDbTinymceEditorElement extends Components.DbTinymceEditor, HTMLStencilElement {
     }
@@ -97,41 +55,17 @@ declare global {
         new (): HTMLDbTinymceEditorElement;
     };
     interface HTMLElementTagNameMap {
-        "db-quill-editor": HTMLDbQuillEditorElement;
         "db-sandbox-editor": HTMLDbSandboxEditorElement;
-        "db-summernote-editor-component": HTMLDbSummernoteEditorComponentElement;
         "db-tinymce-editor": HTMLDbTinymceEditorElement;
     }
 }
 declare namespace LocalJSX {
-    interface DbQuillEditor {
-        "disableToolbar"?: boolean;
-        "editorHeight"?: string;
-        "editorWidth"?: string;
-        "id"?: string|null;
-        "initalEditorHtmlContent"?: string|null;
-        "initialEditorTextContent"?: string|null;
-        "onEditorchange"?: (event: DbQuillEditorCustomEvent<EditorChangeEvent>) => void;
-        "readOnly"?: boolean;
-        "toolbarConfigString": string;
-    }
     interface DbSandboxEditor {
         "disableToolbar"?: boolean;
         "editorHTMLContent"?: string;
         "editorHeight"?: string;
         "editorWidth"?: 'string';
         "onContent-change"?: (event: DbSandboxEditorCustomEvent<{htmlContent:string}>) => void;
-        "placeholder"?: string;
-        "readOnly"?: boolean;
-        "toolbarConfigString"?: string;
-    }
-    interface DbSummernoteEditorComponent {
-        "disableToolbar"?: boolean;
-        "editorHTMLContent"?: string;
-        "editorHeight"?: string;
-        "editorWidth"?: string;
-        "id"?: string;
-        "onContent-change"?: (event: DbSummernoteEditorComponentCustomEvent<{htmlContent:string}>) => void;
         "placeholder"?: string;
         "readOnly"?: boolean;
         "toolbarConfigString"?: string;
@@ -147,15 +81,13 @@ declare namespace LocalJSX {
         "editorWidth"?: string;
         "enableAutoComplete"?: boolean;
         "id"?: string;
-        "onContent-change"?: (event: DbTinymceEditorCustomEvent<EditorChangeEvent1>) => void;
+        "onContent-change"?: (event: DbTinymceEditorCustomEvent<EditorChangeEvent>) => void;
         "placeholder"?: string;
         "readOnly"?: boolean;
         "toolbarConfigString": string;
     }
     interface IntrinsicElements {
-        "db-quill-editor": DbQuillEditor;
         "db-sandbox-editor": DbSandboxEditor;
-        "db-summernote-editor-component": DbSummernoteEditorComponent;
         "db-tinymce-editor": DbTinymceEditor;
     }
 }
@@ -163,9 +95,7 @@ export { LocalJSX as JSX };
 declare module "@stencil/core" {
     export namespace JSX {
         interface IntrinsicElements {
-            "db-quill-editor": LocalJSX.DbQuillEditor & JSXBase.HTMLAttributes<HTMLDbQuillEditorElement>;
             "db-sandbox-editor": LocalJSX.DbSandboxEditor & JSXBase.HTMLAttributes<HTMLDbSandboxEditorElement>;
-            "db-summernote-editor-component": LocalJSX.DbSummernoteEditorComponent & JSXBase.HTMLAttributes<HTMLDbSummernoteEditorComponentElement>;
             "db-tinymce-editor": LocalJSX.DbTinymceEditor & JSXBase.HTMLAttributes<HTMLDbTinymceEditorElement>;
         }
     }
