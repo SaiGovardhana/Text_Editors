@@ -1,5 +1,6 @@
 import { Component, Host, h, Element, Prop, Watch, Event, EventEmitter } from '@stencil/core';
 import { toolbarConfigParser } from './toolbar/ToolbarConfigParser.util';
+import { IframeHtml } from './iframe-content/Iframe.data';
 
 
 @Component({
@@ -139,7 +140,7 @@ export class StencilSandboxEditorComponent {
     
     return (
       <Host>
-        <iframe style={{width:this.editorWidth}}  src='/assets/summernote/summernote.iframe.html'></iframe>
+        <iframe srcDoc={IframeHtml} style={{width:this.editorWidth}}  src='/assets/summernote/summernote.iframe.html'></iframe>
       </Host>
     );
   }
